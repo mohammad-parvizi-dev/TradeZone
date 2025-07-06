@@ -1,0 +1,115 @@
+import React, { useState, useEffect } from 'react';
+import Sidebar from './components/Sidebar';
+import Header from './components/Header';
+import { menuItems } from './constants';
+import { MenuItemType, SelectedCoin } from './types';
+import MarketOverview from './pages/MarketOverview';
+import MarketMovers from './pages/MarketMovers';
+import AdvancedCharting from './pages/AdvancedCharting';
+import FuturesDashboard from './pages/FuturesDashboard';
+import MarketSentiment from './pages/MarketSentiment';
+import OpenInterestAnalysis from './pages/OpenInterestAnalysis';
+import FearAndGreedIndex from './pages/FearAndGreedIndex';
+import DEXOverview from './pages/DEXOverview';
+import PoolsAndPairsAnalysis from './pages/PoolsAndPairsAnalysis';
+
+
+// Helper function to find the breadcrumb path for a given item ID
+const findPath = (items: MenuItemType[], targetId: string, currentPath: string[] = []): string[] | null => {
+  for (const item of items) {
+    const newPath = [...currentPath, item.label];
+    if (item.id === targetId) {
+      return newPath;
+    }
+    if (item.children) {
+      const result = findPath(item.children, targetId, newPath);
+      if (result) {
+        return result;
+      }
+    }
+  }
+  return null;
+};
+
+const App: React.FC = () => {
+  const [activeItemId, setActiveItemId] = useState<string>('market-overview');
+  const [selectedCoin, setSelectedCoin] = useState<SelectedCoin | null>({ id: 'bitcoin', symbol: 'BTC' });
+  const [openItems, setOpenItems] = useState<Record<string, boolean>>({
+    charts: true,
+    crypto: true,
+    spot: true,
+    futures: true,
+    'dex-monitor': true,
+  });
+  const [breadcrumbs, setBreadcrumbs] = useState<string[]>([]);
+  const [pageTitle, setPageTitle] = useState('');
+
+  useEffect(() => {
+    const path = findPath(menuItems, activeItemId);
+    if (path) {
+      setBreadcrumbs(path);
+      setPageTitle(path[path.length - 1] ?? '');
+    } else {
+      // Fallback for initial state or if not found
+      const dashboardPath = findPath(menuItems, 'dashboard') ?? ['Dashboard'];
+      setBreadcrumbs(dashboardPath);
+      setPageTitle(dashboardPath[dashboardPath.length - 1] ?? '');
+    }
+  }, [activeItemId]);
+
+  const toggleOpenItem = (id: string) => {
+    setOpenItems(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const renderContent = () => {
+    const navigationProps = {
+        setActiveItemId,
+        setSelectedCoin
+    };
+    switch (activeItemId) {
+      case 'market-overview':
+        return <MarketOverview {...navigationProps} />;
+      case 'market-movers':
+        return <MarketMovers {...navigationProps} />;
+      case 'advanced-charting':
+        return <AdvancedCharting selectedCoin={selectedCoin} setSelectedCoin={setSelectedCoin} />;
+      case 'futures-dashboard':
+        return <FuturesDashboard {...navigationProps} />;
+      case 'market-sentiment':
+        return <MarketSentiment />;
+      case 'open-interest-analysis':
+        return <OpenInterestAnalysis {...navigationProps} />;
+      case 'risk-monitoring':
+        return <FearAndGreedIndex />;
+      case 'dex-overview':
+        return <DEXOverview />;
+      case 'pools-pairs-analysis':
+        return <PoolsAndPairsAnalysis setActiveItemId={setActiveItemId} setSelectedCoin={setSelectedCoin} />;
+      default:
+        return (
+          <div className="flex items-center space-x-2 text-2xl font-semibold text-gray-400">
+            <p>{pageTitle} Coming Soon....</p>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className="flex h-screen bg-secondary-dark text-light-gray font-sans">
+      <Sidebar 
+        activeItemId={activeItemId}
+        setActiveItemId={setActiveItemId}
+        openItems={openItems}
+        toggleOpenItem={toggleOpenItem}
+      />
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <Header breadcrumbs={breadcrumbs} />
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-secondary-dark p-8">
+          {renderContent()}
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default App;
