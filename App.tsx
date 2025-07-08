@@ -6,12 +6,12 @@ import { MenuItemType, SelectedCoin } from './types';
 import MarketOverview from './pages/MarketOverview';
 import MarketMovers from './pages/MarketMovers';
 import AdvancedCharting from './pages/AdvancedCharting';
-// import FuturesDashboard from './pages/FuturesDashboard';
-// import MarketSentiment from './pages/MarketSentiment';
-// import OpenInterestAnalysis from './pages/OpenInterestAnalysis';
-// import FearAndGreedIndex from './pages/FearAndGreedIndex';
-// import DEXOverview from './pages/DEXOverview';
-// import PoolsAndPairsAnalysis from './pages/PoolsAndPairsAnalysis';
+import FuturesDashboard from './pages/FuturesDashboard';
+import MarketSentiment from './pages/MarketSentiment';
+import OpenInterestAnalysis from './pages/OpenInterestAnalysis';
+import FearAndGreedIndex from './pages/FearAndGreedIndex';
+import DEXOverview from './pages/DEXOverview';
+import PoolsAndPairsAnalysis from './pages/PoolsAndPairsAnalysis';
 
 
 // Helper function to find the breadcrumb path for a given item ID
@@ -73,22 +73,22 @@ const App: React.FC = () => {
         return <MarketMovers {...navigationProps} />;
       case 'advanced-charting':
         return <AdvancedCharting selectedCoin={selectedCoin} setSelectedCoin={setSelectedCoin} />;
-      // case 'futures-dashboard':
-      //   return <FuturesDashboard {...navigationProps} />;
-      // case 'market-sentiment':
-      //   return <MarketSentiment />;
-      // case 'open-interest-analysis':
-      //   return <OpenInterestAnalysis {...navigationProps} />;
-      // case 'risk-monitoring':
-      //   return <FearAndGreedIndex />;
-      // case 'dex-overview':
-      //   return <DEXOverview />;
-      // case 'pools-pairs-analysis':
-      //   return <PoolsAndPairsAnalysis setActiveItemId={setActiveItemId} setSelectedCoin={setSelectedCoin} />;
+      case 'futures-dashboard':
+        return <FuturesDashboard {...navigationProps} />;
+      case 'market-sentiment':
+        return <MarketSentiment />;
+      case 'open-interest-analysis':
+        return <OpenInterestAnalysis {...navigationProps} />;
+      case 'risk-monitoring':
+        return <FearAndGreedIndex />;
+      case 'dex-overview':
+        return <DEXOverview />;
+      case 'pools-pairs-analysis':
+        return <PoolsAndPairsAnalysis setActiveItemId={setActiveItemId} setSelectedCoin={setSelectedCoin} />;
       default:
         return (
-          <div className="flex items-center justify-center h-full text-2xl font-semibold text-gray-400">
-            <p>{pageTitle} - Coming Soon...</p>
+          <div className="flex items-center space-x-2 text-2xl font-semibold text-gray-400">
+            <p>{pageTitle} Coming Soon....</p>
           </div>
         );
     }
