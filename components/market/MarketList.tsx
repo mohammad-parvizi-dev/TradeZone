@@ -116,7 +116,9 @@ const MarketList: React.FC<MarketListProps> = ({ data, setActiveItemId, setSelec
                             <SortableHeader label="#" sortKey="market_cap_rank" sortConfig={sortConfig} onSort={handleSort} />
                             <SortableHeader label="Name" sortKey="name" sortConfig={sortConfig} onSort={handleSort} className="w-1/4"/>
                             <SortableHeader label="Price" sortKey="current_price" sortConfig={sortConfig} onSort={handleSort} />
+                            <SortableHeader label="1h %" sortKey="price_change_percentage_1h_in_currency" sortConfig={sortConfig} onSort={handleSort} />
                             <SortableHeader label="24h %" sortKey="price_change_percentage_24h" sortConfig={sortConfig} onSort={handleSort} />
+                            <SortableHeader label="7d %" sortKey="price_change_percentage_7d_in_currency" sortConfig={sortConfig} onSort={handleSort} />
                             <SortableHeader label="Market Cap" sortKey="market_cap" sortConfig={sortConfig} onSort={handleSort} />
                             <SortableHeader label="Volume (24h)" sortKey="total_volume" sortConfig={sortConfig} onSort={handleSort} />
                             <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">7d Chart</th>
@@ -134,8 +136,14 @@ const MarketList: React.FC<MarketListProps> = ({ data, setActiveItemId, setSelec
                                     </div>
                                 </td>
                                 <td className="px-4 py-4 whitespace-nowrap text-sm text-white font-mono">{formatCurrency(coin.current_price)}</td>
+                                <td className={`px-4 py-4 whitespace-nowrap text-sm font-mono ${coin.price_change_percentage_1h_in_currency == null ? 'text-gray-500' : coin.price_change_percentage_1h_in_currency >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                    {coin.price_change_percentage_1h_in_currency != null ? `${coin.price_change_percentage_1h_in_currency.toFixed(2)}%` : 'N/A'}
+                                </td>
                                 <td className={`px-4 py-4 whitespace-nowrap text-sm font-mono ${coin.price_change_percentage_24h >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                                     {coin.price_change_percentage_24h.toFixed(2)}%
+                                </td>
+                                <td className={`px-4 py-4 whitespace-nowrap text-sm font-mono ${coin.price_change_percentage_7d_in_currency == null ? 'text-gray-500' : coin.price_change_percentage_7d_in_currency >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                    {coin.price_change_percentage_7d_in_currency != null ? `${coin.price_change_percentage_7d_in_currency.toFixed(2)}%` : 'N/A'}
                                 </td>
                                 <td className="px-4 py-4 whitespace-nowrap text-sm text-white font-mono">${formatLargeNumber(coin.market_cap)}</td>
                                 <td className="px-4 py-4 whitespace-nowrap text-sm text-white font-mono">${formatLargeNumber(coin.total_volume)}</td>
