@@ -115,7 +115,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItemId, setActiveItemId, openIt
             <a href="#" className="text-gray-500 hover:text-white"><DiscordIcon className="w-5 h-5" /></a>
         </div>
         <div className="text-center mt-4 text-xs text-gray-500">
-          Version 1.2.0
+          Version 1.17.0
         </div>
       </div>
     </div>

@@ -12,6 +12,12 @@ import OpenInterestAnalysis from './pages/OpenInterestAnalysis';
 import FearAndGreedIndex from './pages/FearAndGreedIndex';
 import DEXOverview from './pages/DEXOverview';
 import PoolsAndPairsAnalysis from './pages/PoolsAndPairsAnalysis';
+import DeFiHealthDashboard from './pages/DeFiHealthDashboard';
+import ProtocolRankings from './pages/ProtocolRankings';
+import YieldOpportunities from './pages/YieldOpportunities';
+import MonitoringDashboard from './pages/MonitoringDashboard';
+import PegStabilityMonitor from './pages/PegStabilityMonitor';
+import DistributionAnalysis from './pages/DistributionAnalysis';
 
 
 // Helper function to find the breadcrumb path for a given item ID
@@ -40,6 +46,8 @@ const App: React.FC = () => {
     spot: true,
     futures: true,
     'dex-monitor': true,
+    'defi-tokens': true,
+    stablecoins: true,
   });
   const [breadcrumbs, setBreadcrumbs] = useState<string[]>([]);
   const [pageTitle, setPageTitle] = useState('');
@@ -85,6 +93,18 @@ const App: React.FC = () => {
         return <DEXOverview />;
       case 'pools-pairs-analysis':
         return <PoolsAndPairsAnalysis setActiveItemId={setActiveItemId} setSelectedCoin={setSelectedCoin} />;
+      case 'defi-health-dashboard':
+        return <DeFiHealthDashboard />;
+      case 'protocol-rankings':
+        return <ProtocolRankings />;
+      case 'yield-opportunities':
+        return <YieldOpportunities />;
+      case 'monitoring-dashboard':
+        return <MonitoringDashboard />;
+      case 'peg-stability-monitor':
+        return <PegStabilityMonitor />;
+      case 'distribution-analysis':
+        return <DistributionAnalysis />;
       default:
         return (
           <div className="flex items-center space-x-2 text-2xl font-semibold text-gray-400">

@@ -94,6 +94,17 @@ export interface ChartDataPoint {
     value: number;
 }
 
+export interface DefiLlamaChartPoint {
+  date: string;
+  totalLiquidityUSD: number;
+}
+
+export interface DefiLlamaChainData {
+  name: string;
+  tvl: number;
+}
+
+
 export interface DexPool {
   id: string; // e.g. pool address
   pairName: string; // e.g. WETH / USDC
@@ -130,4 +141,69 @@ export interface LiquidationEvent {
     price: number;
     quantityUSD: number;
     timestamp: number;
+}
+
+export interface ProtocolRevenueData {
+  name: string;
+  slug: string;
+  category: string;
+  logo: string;
+  dailyFees: number | null;
+  dailyRevenue: number | null;
+}
+
+export interface YieldPool {
+  pool: string;
+  chain: string;
+  project: string;
+  symbol: string;
+  tvlUsd: number;
+  apy: number;
+  apyBase?: number;
+  apyReward?: number;
+}
+
+interface CirculatingInfo {
+    peggedUSD: number;
+}
+
+export interface PeggedAsset {
+    id: string;
+    name: string;
+    symbol: string;
+    gecko_id: string | null;
+    pegType: 'peggedUSD' | 'peggedVAR';
+    pegMechanism?: string;
+    priceSource: string;
+    price: number | null;
+    circulating: CirculatingInfo;
+    circulatingPrevDay: CirculatingInfo | null;
+    circulatingPrevWeek: CirculatingInfo | null;
+    circulatingPrevMonth: CirculatingInfo | null;
+    logo: string;
+    chainCirculating?: {
+        [chain: string]: {
+            current?: CirculatingInfo;
+            circulating?: CirculatingInfo;
+            circulatingPrevDay?: CirculatingInfo | null;
+            circulatingPrevWeek?: CirculatingInfo | null;
+            circulatingPrevMonth?: CirculatingInfo | null;
+            peggedUSD?: number;
+        }
+    };
+}
+
+export interface MergedStablecoinData {
+    id: string;
+    name: string;
+    symbol: string;
+    logo: string;
+    price: number | null;
+    change24h: number | null;
+    marketCap: number;
+}
+
+export interface GlobalStatsData {
+  total_market_cap: { [currency: string]: number };
+  market_cap_percentage: { [currency: string]: number };
 }

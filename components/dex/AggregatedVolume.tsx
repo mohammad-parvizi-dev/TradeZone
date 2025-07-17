@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { ChartDataPoint } from '../../types';
 import VolumeChart from './VolumeChart';
+import { fetchWithCache } from '../../utils/api';
 
 const timeRanges = ['7D', '30D', '90D', '1Y', 'ALL'];
 
@@ -15,12 +17,11 @@ const AggregatedVolume: React.FC = () => {
             setLoading(true);
             setError(null);
             try {
-                // Correct endpoint for aggregated daily DEX volume
-                const response = await fetch('https://api.llama.fi/overview/dexs?dataType=dailyVolume');
-                 if (!response.ok) {
-                    throw new Error(`Failed to fetch aggregated volume data: ${response.statusText}`);
-                }
-                const data = await response.json();
+                const data = await fetchWithCache<{totalDataChart: [number, number][]}>(
+                    'llama-dex-volume',
+                    'https://api.llama.fi/overview/dexs?dataType=dailyVolume',
+                    600 // 10 minutes cache
+                );
                 
                 if (!data || !Array.isArray(data.totalDataChart)) {
                     throw new Error("API did not return a valid data structure for aggregated volume.");

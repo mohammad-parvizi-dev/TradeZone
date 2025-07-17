@@ -38,8 +38,26 @@ export const menuItems: MenuItemType[] = [
               { id: 'pools-pairs-analysis', label: 'Pools & Pairs Analysis', icon: SubItemIcon },
             ]
           },
-          { id: 'defi-tokens', label: 'DeFi Tokens', icon: SubItemIcon, isLocked: true },
-          { id: 'stablecoins', label: 'Stablecoins', icon: SubItemIcon, isLocked: true },
+          { 
+            id: 'defi-tokens', 
+            label: 'DeFi Tokens', 
+            icon: DeFiIcon,
+            children: [
+              { id: 'defi-health-dashboard', label: 'DeFi Health Dashboard', icon: SubItemIcon },
+              { id: 'protocol-rankings', label: 'Protocol Rankings', icon: SubItemIcon },
+              { id: 'yield-opportunities', label: 'Yield Opportunities', icon: SubItemIcon },
+            ]
+          },
+          { 
+            id: 'stablecoins', 
+            label: 'Stablecoins', 
+            icon: SubItemIcon, 
+            children: [
+              { id: 'monitoring-dashboard', label: 'Monitoring Dashboard', icon: SubItemIcon },
+              { id: 'peg-stability-monitor', label: 'Peg Stability Monitor', icon: SubItemIcon },
+              { id: 'distribution-analysis', label: 'Distribution Analysis', icon: SubItemIcon },
+            ]
+          },
         ] 
       },
       { id: 'forex', label: 'Forex', icon: ForexIcon, href: '#' },

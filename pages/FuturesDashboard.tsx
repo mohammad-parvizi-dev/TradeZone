@@ -1,8 +1,10 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { SelectedCoin, DerivativeData } from '../types';
 import ContractsComparisonTable from '../components/futures/ContractsComparisonTable';
 import SearchableAssetSelector from '../components/futures/SearchableAssetSelector';
 import { popularAssets } from '../constants';
+import { fetchWithCache } from '../utils/api';
 
 const FuturesDashboard: React.FC<{
     setActiveItemId: (id: string) => void;
@@ -18,13 +20,7 @@ const FuturesDashboard: React.FC<{
             setLoading(true);
             setError(null);
             try {
-                // In a real app, this would be a backend call aggregating data.
-                // We use CoinGecko's derivatives endpoint as a proxy.
-                const response = await fetch('https://api.coingecko.com/api/v3/derivatives');
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch derivatives data: ${response.statusText}`);
-                }
-                const data: DerivativeData[] = await response.json();
+                const data = await fetchWithCache<DerivativeData[]>('cg-derivatives', 'https://api.coingecko.com/api/v3/derivatives', 3600);
                 setAllDerivatives(data);
             } catch (err: any) {
                 console.error(err);

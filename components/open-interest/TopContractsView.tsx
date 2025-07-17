@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { SelectedCoin, DerivativeData } from '../../types';
 import { ArrowUpIcon, ArrowDownIcon, InfoIcon, SearchIcon } from '../icons';
+import { fetchWithCache } from '../../utils/api';
 
 const formatNumber = (num: number | string | null | undefined, options: Intl.NumberFormatOptions = {}) => {
     const number = typeof num === 'string' ? parseFloat(num) : num;
@@ -60,9 +62,7 @@ const TopContractsView: React.FC<TopContractsViewProps> = ({ setActiveItemId, se
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch('https://api.coingecko.com/api/v3/derivatives?include_tickers=unexpired');
-                if (!response.ok) throw new Error('Failed to fetch contracts data');
-                const data: DerivativeData[] = await response.json();
+                const data = await fetchWithCache<DerivativeData[]>('cg-derivatives', 'https://api.coingecko.com/api/v3/derivatives?include_tickers=unexpired', 3600);
                 const perpetuals = data.filter(d => d.contract_type === 'perpetual' && d.open_interest && d.open_interest > 0);
                 setContracts(perpetuals);
             } catch (err: any) {

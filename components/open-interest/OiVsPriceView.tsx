@@ -1,9 +1,11 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
 import DualAxisChart from '../charting/DualAxisChart';
 import { InfoIcon } from '../icons';
 import SearchableAssetSelector from '../futures/SearchableAssetSelector';
 import { popularAssets } from '../../constants';
 import { ChartDataPoint } from '../../types';
+import { fetchWithCache } from '../../utils/api';
 
 const popularExchanges = ['Bybit', 'Binance']; // Simplified for demo
 const timeRanges = ['1M', '3M', '6M', '1Y'];
@@ -47,12 +49,12 @@ const OiVsPriceView: React.FC = () => {
 
             try {
                 // --- API Calls ---
-                const pricePromise = fetch(`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=${days}`)
-                    .then(res => res.ok ? res.json() : Promise.reject(new Error(`Failed to fetch price data: ${res.statusText}`)));
+                const priceUrl = `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=${days}`;
+                const pricePromise = fetchWithCache<{ prices: [number, number][] }>(`cg-market-chart-${coinId}-${days}`, priceUrl, 600);
                 
                 const oiSymbol = `${selectedAsset}USDT`;
-                const oiPromise = fetch(`https://api.bybit.com/v5/market/open-interest?category=linear&symbol=${oiSymbol}&intervalTime=4h&limit=200`)
-                     .then(res => res.ok ? res.json() : Promise.reject(new Error(`Failed to fetch OI data: ${res.statusText}`)));
+                const oiUrl = `https://api.bybit.com/v5/market/open-interest?category=linear&symbol=${oiSymbol}&intervalTime=4h&limit=200`;
+                const oiPromise = fetchWithCache<{ result?: { list?: { openInterest: string, timestamp: string }[]}, retMsg?: string }>(`bybit-oi-${oiSymbol}`, oiUrl, 300);
 
                 const [priceResult, oiResult] = await Promise.all([pricePromise, oiPromise]);
 
@@ -60,7 +62,7 @@ const OiVsPriceView: React.FC = () => {
                 if (!priceResult.prices || !Array.isArray(priceResult.prices)) {
                     throw new Error("Invalid price data from CoinGecko");
                 }
-                if (oiResult.retCode !== 0 || !Array.isArray(oiResult.result?.list)) {
+                if (!oiResult.result?.list || !Array.isArray(oiResult.result.list)) {
                     throw new Error(oiResult.retMsg || "Invalid OI data from Bybit");
                 }
 

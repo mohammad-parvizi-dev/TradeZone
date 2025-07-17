@@ -1,9 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { DexPool, SelectedCoin } from '../types';
 import TrendingPools from '../components/dex/MostActivePools';
 import PairSearch from '../components/dex/PairSearch';
 import PoolAnalysis from '../components/dex/PoolAnalysis';
 import { ListIcon, SearchIcon } from '../components/icons';
+import { fetchWithCache } from '../utils/api';
 
 type ActiveView = 'list' | 'analysis';
 type ActiveTab = 'trending' | 'search';
@@ -56,11 +58,7 @@ const PoolsAndPairsAnalysis: React.FC<PoolsAndPairsAnalysisProps> = ({ setActive
             setIsLoading(true);
             setError(null);
             try {
-                const response = await fetch('https://yields.llama.fi/pools');
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch pools from DefiLlama: ${response.status} ${response.statusText}`);
-                }
-                const apiResponse: { data: DefiLlamaPool[] } = await response.json();
+                const apiResponse = await fetchWithCache<{ data: DefiLlamaPool[] }>('llama-yield-pools', 'https://yields.llama.fi/pools', 600);
 
                 if (!apiResponse || !Array.isArray(apiResponse.data)) {
                     throw new Error("Invalid data structure from DefiLlama pools API");

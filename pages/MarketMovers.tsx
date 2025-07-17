@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { CoinMarketData, SelectedCoin } from '../types';
 import MoversList from '../components/market/MoversList';
+import { fetchWithCache } from '../utils/api';
 
 type MoverTab = 'gainers' | 'losers' | 'active';
 type Timeframe = '1h' | '24h' | '7d';
@@ -41,11 +42,8 @@ const MarketMovers: React.FC<MarketMoversProps> = ({ setActiveItemId, setSelecte
             try {
                 setLoading(true);
                 setError(null);
-                const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false&price_change_percentage=1h%2C24h%2C7d');
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
-                }
-                const result: CoinMarketData[] = await response.json();
+                const url = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false&price_change_percentage=1h%2C24h%2C7d';
+                const result = await fetchWithCache<CoinMarketData[]>('cg-markets-250', url, 60);
                 setData(result);
             } catch (err: any) {
                 console.error("Error fetching coin data:", err);

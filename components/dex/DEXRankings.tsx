@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { DexProtocol } from '../../types';
 import { ArrowUpIcon, ArrowDownIcon } from '../icons';
+import { fetchWithCache } from '../../utils/api';
 
 const formatLargeNumber = (value: number | null | undefined) => {
     if (value === null || value === undefined) return 'N/A';
@@ -43,11 +45,7 @@ const DEXRankings: React.FC = () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch('https://api.llama.fi/protocols');
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch protocol data from DefiLlama: ${response.statusText}`);
-                }
-                const data: DexProtocol[] = await response.json();
+                const data = await fetchWithCache<DexProtocol[]>('llama-protocols', 'https://api.llama.fi/protocols', 3600);
                 // Broaden filter to include "Derivatives" as they function as DEXs for many users.
                 const dexes = data.filter(p => {
                     const category = p.category?.trim().toLowerCase();

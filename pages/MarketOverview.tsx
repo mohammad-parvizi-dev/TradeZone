@@ -5,6 +5,7 @@ import MarketList from '../components/market/MarketList';
 import Heatmap from '../components/market/Heatmap';
 import { CoinMarketData, SelectedCoin } from '../types';
 import { ListIcon, GridIcon } from '../components/icons';
+import { fetchWithCache } from '../utils/api';
 
 interface MarketOverviewProps {
     setActiveItemId: (id: string) => void;
@@ -22,11 +23,8 @@ const MarketOverview: React.FC<MarketOverviewProps> = ({ setActiveItemId, setSel
             try {
                 setLoading(true);
                 setError(null);
-                const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=1h%2C24h%2C7d');
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
-                }
-                const result: CoinMarketData[] = await response.json();
+                const url = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=1h%2C24h%2C7d';
+                const result = await fetchWithCache<CoinMarketData[]>('cg-markets', url, 60);
                 setData(result);
             } catch (err: any) {
                 console.error("Error fetching coin data:", err);

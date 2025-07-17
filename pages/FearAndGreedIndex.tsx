@@ -1,5 +1,7 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { FngData } from '../types';
+import { fetchWithCache } from '../utils/api';
 
 const timeRanges = [
     { label: '1M', days: 30 },
@@ -103,9 +105,7 @@ const FearAndGreedIndex: React.FC = () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch('https://api.alternative.me/fng/?limit=0&format=json');
-                if (!response.ok) throw new Error(`Failed to fetch Fear & Greed data: ${response.statusText}`);
-                const result = await response.json();
+                const result = await fetchWithCache<{data: FngData[]}>('fng-index', 'https://api.alternative.me/fng/?limit=0&format=json', 3600 * 4);
                 if (!result.data || !Array.isArray(result.data)) throw new Error("Invalid API response structure.");
                 setAllData(result.data);
             } catch (err: any) {
