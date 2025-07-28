@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 export interface MenuItemType {
@@ -206,4 +207,39 @@ export interface MergedStablecoinData {
 export interface GlobalStatsData {
   total_market_cap: { [currency: string]: number };
   market_cap_percentage: { [currency: string]: number };
+}
+
+export interface FmpForexQuote {
+  ticker: string;
+  bid: string;
+  ask: string;
+  open: string;
+  low: string;
+  high: string;
+  changes: number;
+  date: string;
+}
+
+export interface ForexRate {
+  ticker: string;
+  bid: number;
+  ask: number;
+  open: number;
+  low: number;
+  high: number;
+  changes: number;
+  spread: number;
+  changesPercentage: number;
+}
+
+export interface FinnhubNews {
+  category: string;
+  datetime: number;
+  headline: string;
+  id: number;
+  image: string;
+  related: string;
+  source: string;
+  summary: string;
+  url: string;
 }

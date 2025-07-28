@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -18,6 +19,15 @@ import YieldOpportunities from './pages/YieldOpportunities';
 import MonitoringDashboard from './pages/MonitoringDashboard';
 import PegStabilityMonitor from './pages/PegStabilityMonitor';
 import DistributionAnalysis from './pages/DistributionAnalysis';
+import ForexRatesTable from './pages/ForexRatesTable';
+import ForexAdvancedCharting from './pages/ForexAdvancedCharting';
+import ForexHeatmap from './pages/ForexHeatmap';
+import ForexPerformanceLeaders from './pages/ForexPerformanceLeaders';
+import ForexCurrencyStrengthMeter from './pages/ForexCurrencyStrengthMeter';
+import ForexHistoricalData from './pages/ForexHistoricalData';
+import EconomicCalendar from './pages/EconomicCalendar';
+import CentralBankHub from './pages/CentralBankHub';
+import ForexNewsAnalysis from './pages/ForexNewsAnalysis';
 
 
 // Helper function to find the breadcrumb path for a given item ID
@@ -40,6 +50,7 @@ const findPath = (items: MenuItemType[], targetId: string, currentPath: string[]
 const App: React.FC = () => {
   const [activeItemId, setActiveItemId] = useState<string>('market-overview');
   const [selectedCoin, setSelectedCoin] = useState<SelectedCoin | null>({ id: 'bitcoin', symbol: 'BTC' });
+  const [selectedForexPair, setSelectedForexPair] = useState<string | null>(null);
   const [openItems, setOpenItems] = useState<Record<string, boolean>>({
     charts: true,
     crypto: true,
@@ -48,6 +59,10 @@ const App: React.FC = () => {
     'dex-monitor': true,
     'defi-tokens': true,
     stablecoins: true,
+    forex: true,
+    'forex-market-overview': true,
+    'forex-advanced-charting': true,
+    'forex-fundamental-analysis': true,
   });
   const [breadcrumbs, setBreadcrumbs] = useState<string[]>([]);
   const [pageTitle, setPageTitle] = useState('');
@@ -74,6 +89,11 @@ const App: React.FC = () => {
         setActiveItemId,
         setSelectedCoin
     };
+    const forexNavigationProps = {
+        setActiveItemId,
+        setSelectedForexPair
+    };
+
     switch (activeItemId) {
       case 'market-overview':
         return <MarketOverview {...navigationProps} />;
@@ -105,6 +125,24 @@ const App: React.FC = () => {
         return <PegStabilityMonitor />;
       case 'distribution-analysis':
         return <DistributionAnalysis />;
+      case 'forex-rates-table':
+        return <ForexRatesTable {...forexNavigationProps} />;
+      case 'forex-full-analytical-chart':
+        return <ForexAdvancedCharting selectedForexPair={selectedForexPair} setActiveItemId={setActiveItemId} />;
+      case 'forex-historical-data':
+        return <ForexHistoricalData />;
+      case 'forex-heatmap':
+        return <ForexHeatmap />;
+      case 'forex-performance-leaders':
+        return <ForexPerformanceLeaders />;
+      case 'forex-currency-strength-meter':
+        return <ForexCurrencyStrengthMeter />;
+      case 'economic-calendar':
+        return <EconomicCalendar />;
+      case 'central-bank-hub':
+        return <CentralBankHub />;
+      case 'news-analysis':
+        return <ForexNewsAnalysis />;
       default:
         return (
           <div className="flex items-center space-x-2 text-2xl font-semibold text-gray-400">

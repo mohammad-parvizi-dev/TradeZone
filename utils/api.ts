@@ -5,7 +5,7 @@ interface Cache<T> {
 }
 
 /**
- * Fetches data from a URL with caching capabilities using sessionStorage.
+ * Fetches data from a URL with caching capabilities using localStorage.
  *
  * @param cacheKey - A unique key for storing and retrieving the cached data.
  * @param url - The URL to fetch data from.
@@ -17,7 +17,7 @@ export async function fetchWithCache<T>(
   url: string,
   cacheDurationInSeconds: number = 60
 ): Promise<T> {
-  const cachedItem = sessionStorage.getItem(cacheKey);
+  const cachedItem = localStorage.getItem(cacheKey);
 
   if (cachedItem) {
     try {
@@ -29,7 +29,7 @@ export async function fetchWithCache<T>(
       }
     } catch (e) {
       console.error(`Error parsing cache for key ${cacheKey}:`, e);
-      sessionStorage.removeItem(cacheKey);
+      localStorage.removeItem(cacheKey);
     }
   }
 
@@ -49,9 +49,9 @@ export async function fetchWithCache<T>(
   };
 
   try {
-    sessionStorage.setItem(cacheKey, JSON.stringify(cacheEntry));
+    localStorage.setItem(cacheKey, JSON.stringify(cacheEntry));
   } catch (e) {
-    console.error(`Failed to write to sessionStorage for key ${cacheKey}:`, e);
+    console.error(`Failed to write to localStorage for key ${cacheKey}:`, e);
   }
 
   return data;

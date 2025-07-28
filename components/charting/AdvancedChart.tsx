@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef } from 'react';
 import { SelectedCoin } from '../../types';
 
@@ -50,25 +51,30 @@ const AdvancedChart: React.FC<AdvancedChartProps> = ({ selectedCoin }) => {
       container_id: containerRef.current.id,
     };
 
-    if (widgetRef.current) {
-        widgetRef.current.remove();
-        widgetRef.current = null;
-    }
-    
-    if(containerRef.current) {
-        containerRef.current.innerHTML = '';
-    }
-
+    // Create the widget
     const widget = new TradingView.widget(widgetOptions);
     widgetRef.current = widget;
 
-  }, [selectedCoin]);
+    // Add a cleanup function to be called on unmount or when dependencies change
+    return () => {
+        if(widgetRef.current) {
+            try {
+                widgetRef.current.remove();
+            } catch (e) {
+                console.warn("Error removing TradingView widget on unmount:", e);
+            }
+            widgetRef.current = null;
+        }
+    }
 
-  // Using a key on the container div ensures React creates a new DOM element when the coin changes,
-  // which helps with TradingView widget re-initialization.
+  }, [selectedCoin]); // Re-run effect when selectedCoin changes
+
   const containerId = `tradingview-widget-container-${selectedCoin.exchange || 'spot'}-${selectedCoin.symbol}`;
 
   return (
+    // By giving the div a key that changes with the coin, we ensure that React
+    // fully unmounts the old component and mounts a new one, which helps
+    // the TradingView widget re-initialize cleanly.
     <div key={containerId} id={containerId} ref={containerRef} className="h-[70vh] w-full" />
   );
 };

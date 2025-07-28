@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { MenuItemType } from './types';
 import { 
@@ -60,7 +61,47 @@ export const menuItems: MenuItemType[] = [
           },
         ] 
       },
-      { id: 'forex', label: 'Forex', icon: ForexIcon, href: '#' },
+      { 
+        id: 'forex', 
+        label: 'Forex', 
+        icon: ForexIcon, 
+        children: [
+          { 
+            id: 'forex-market-overview', 
+            label: 'Market Overview', 
+            icon: SubItemIcon,
+            children: [
+              { id: 'forex-rates-table', label: 'Rates Table', icon: SubItemIcon },
+              { id: 'forex-heatmap', label: 'Heatmap', icon: SubItemIcon },
+              { id: 'forex-performance-leaders', label: 'Performance Leaders', icon: SubItemIcon },
+              { id: 'forex-currency-strength-meter', label: 'Currency Strength Meter', icon: SubItemIcon },
+            ]
+          },
+          { 
+            id: 'forex-advanced-charting', 
+            label: 'Advanced Charting', 
+            icon: SubItemIcon,
+            children: [
+              { id: 'forex-full-analytical-chart', label: 'Full Analytical Chart', icon: SubItemIcon },
+              { id: 'forex-historical-data', label: 'Historical Data', icon: SubItemIcon },
+            ]
+          },
+          { 
+            id: 'forex-fundamental-analysis', 
+            label: 'Fundamental Analysis', 
+            icon: SubItemIcon,
+            children: [
+              { id: 'economic-calendar', label: 'Economic Calendar', icon: SubItemIcon },
+              { id: 'central-bank-hub', label: 'Central Bank Hub', icon: SubItemIcon },
+              { id: 'news-analysis', label: 'News & Analysis', icon: SubItemIcon },
+            ]
+          },
+          { id: 'forex-sentiment-analysis', label: 'Sentiment Analysis', icon: SubItemIcon },
+          { id: 'forex-options-volatility', label: 'Options & Volatility', icon: SubItemIcon },
+          { id: 'forex-inter-market-analysis', label: 'Inter-Market Analysis', icon: SubItemIcon },
+          { id: 'forex-trader-tools', label: 'Trader Tools', icon: SubItemIcon },
+        ] 
+      },
       { id: 'stocks', label: 'Stocks', icon: StockIcon, href: '#' },
       { id: 'commodities', label: 'Commodities', icon: CommoditiesIcon, href: '#', isLocked: true },
       { id: 'custom-watchlist', label: 'Custom Watchlist', icon: WatchlistIcon, href: '#', isLocked: true },
@@ -114,3 +155,12 @@ export const popularAssets: string[] = [
   'BTC', 'ETH', 'SOL', 'XRP', 'DOGE', 'ADA', 'BNB',
   'LINK', 'AVAX', 'DOT', 'MATIC', 'LTC', 'BCH', 'TRX', 'UNI', 'NEAR', 'ATOM'
 ];
+
+export const FMP_API_KEY = 'VtcwTgZVFLQVUy9Ylv5CwI6gMLLAmy7W';
+export const FINNHUB_API_KEY = 'd1v740hr01qj71gjrimgd1v740hr01qj71gjrin0';
+
+export const forexPairs = {
+  majors: ["EUR/USD", "USD/JPY", "GBP/USD", "USD/CHF", "USD/CAD", "AUD/USD", "NZD/USD"],
+  minors: ["EUR/GBP", "EUR/AUD", "EUR/JPY", "GBP/JPY", "AUD/JPY", "CAD/JPY", "NZD/JPY", "EUR/CAD", "AUD/CAD", "EUR/CHF", "GBP/CHF", "AUD/CHF"],
+  exotics: ["USD/TRY", "USD/ZAR", "USD/SGD", "USD/HKD", "USD/MXN", "EUR/TRY", "USD/CNH", "USD/THB", "USD/NOK", "USD/SEK"],
+};
